@@ -6,7 +6,7 @@ RUN apk add --no-cache --virtual .build-deps \
     libffi-dev jpeg-dev zlib-dev
 RUN apk add --no-cache ffmpeg
 WORKDIR /usr/src/app
-COPY poetry.lock pyproject.toml /usr/src/app/
+# COPY poetry.lock pyproject.toml /usr/src/app/
 RUN pip install poetry
 RUN poetry config virtualenvs.create false
 RUN pip install --upgrade pip

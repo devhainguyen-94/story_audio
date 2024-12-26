@@ -9,9 +9,9 @@ WORKDIR /usr/src/app
 # COPY poetry.lock pyproject.toml /usr/src/app/
 # RUN pip install poetry
 # RUN poetry config virtualenvs.create false
-RUN pip install --upgrade pip
-COPY ./requirements.txt /app/
-RUN pip install -r requirements.txt
+# RUN pip install --upgrade pip
+# COPY ./requirements.txt /app/
+# RUN pip install -r requirements.txt
 
 COPY . /app
 

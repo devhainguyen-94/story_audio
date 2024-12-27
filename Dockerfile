@@ -15,7 +15,7 @@ COPY . /app/
 ENV PYTHONUNBUFFERED=1
 
 # Chạy các lệnh cần thiết (collectstatic, migrate)
-RUN python manage.py collectstatic --noinput
+# RUN python manage.py collectstatic --noinput
 RUN python manage.py migrate
 
 # Expose cổng mặc định

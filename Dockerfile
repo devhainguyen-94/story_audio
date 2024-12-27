@@ -1,20 +1,25 @@
-FROM python:3.11.4-slim-bullseye
+# Sử dụng Python base image
+FROM python:3.10-slim
+
+# Thiết lập thư mục làm việc
 WORKDIR /app
 
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONDONTWRITEBYTECODE 1
+# Sao chép requirements.txt và cài đặt dependencies
+COPY requirements.txt /app/
+RUN pip install --no-cache-dir -r requirements.txt
 
-# install system dependencies
-RUN apt-get update
+# Sao chép toàn bộ code vào container
+COPY . /app/
 
-# install dependencies
-RUN pip install --upgrade pip
-COPY ./requirements.txt /app/
-RUN pip install -r requirements.txt
-RUN apk add --no-cache --virtual .build-deps \
-    ca-certificates gcc postgresql-dev linux-headers musl-dev \
-    libffi-dev jpeg-dev zlib-dev
-RUN apk add --no-cache ffmpeg
-COPY . /app
+# Thiết lập biến môi trường
+ENV PYTHONUNBUFFERED=1
 
-ENTRYPOINT [ "gunicorn", "core.wsgi"]
+# Chạy các lệnh cần thiết (collectstatic, migrate)
+RUN python manage.py collectstatic --noinput
+RUN python manage.py migrate
+
+# Expose cổng mặc định
+EXPOSE 8000
+
+# Chạy ứng dụng
+CMD ["gunicorn", "myproject.wsgi:application", "--bind", "0.0.0.0:8000"]
